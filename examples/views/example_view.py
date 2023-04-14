@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework import serializers, fields
 from rest_framework.views import APIView
 
-from examples.serializers.example_model_serializer import ExampleModelSerializer
+# from examples.serializers.example_model_serializer import ExampleModelSerializer
 from examples.services.example_service import get_example_model, create_example_model
 
 
@@ -19,8 +19,8 @@ class ExampleView(APIView):
         uuid = serializer.validated_data.get('uuid')
 
         resp_obj = get_example_model(uuid)
-        serialized = ExampleModelSerializer(resp_obj)
-        return JsonResponse(serialized.data)
+        # serialized = ExampleModelSerializer(resp_obj)
+        return JsonResponse(data=resp_obj, safe=False)
 
     def create(self, request):
         uuid = request.GET.get('uuid')

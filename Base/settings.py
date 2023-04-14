@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,12 +26,16 @@ SECRET_KEY = 'django-insecure-(=ix%-knmk*320^$=rh2^xn#uu*^2huvaemoxn(@9!d+rriaqh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "0.0.0.0"
+]
 
 # Application definition
 
 INSTALLED_APPS = [
-    # 'examples', # for completeness
+    'examples',  # for completeness
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -60,8 +65,18 @@ REST_FRAMEWORK = {
 SPECTACULAR_SETTINGS = {
     'TITLE': 'OpenAI SaaS Content Assistant',
     'DESCRIPTION': '',
-    'VERSION': '1.0.0',
+    'VERSION': '0.0.0-dsk',
     'SERVE_INCLUDE_SCHEMA': False,
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Authorization"
+            }
+        }
+    },
+    "SECURITY": [{"ApiKeyAuth": [], }],
     # OTHER SETTINGS
 }
 CORS_ORIGIN_ALLOW_ALL = True
@@ -142,3 +157,38 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            # 'format': '%(asctime)s %(name)s %(levelname)-4s %(message)s',
+            'format': '%(asctime)s %(levelname)-4s %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+            'formatter': 'verbose'
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': LOG_LEVEL,
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': LOG_LEVEL,
+            'propagate': False,
+        },
+        '': {
+            'handlers': ['console'],
+            'level': LOG_LEVEL,
+            'propagate': False,
+        },
+    },
+}
