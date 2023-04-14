@@ -11,6 +11,7 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_HOST: postgres
       DJANGO_SETTINGS_MODULE: Base.settings
+      LOG_LEVEL: 'INFO'
     ports:
       - "8000:8000"
     volumes:
@@ -41,7 +42,7 @@ services:
   postgres:
     image: postgres:15
     volumes:
-      - database:/var/lib/postgresql/data
+      - dsk-database:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -58,4 +59,4 @@ services:
     image: redis:7-alpine
 
 volumes:
-  database:
+  dsk-database:

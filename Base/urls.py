@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from drf_spectacular.views import SpectacularAPIView
 
-# from examples.views.example_view import ExampleView
+from examples.views.example_view import ExampleView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('examples/', ExampleView.as_view()),
+    path('examples/', ExampleView.as_view()),
+    path('api/schema/', SpectacularAPIView.as_view()),
+
 ]
